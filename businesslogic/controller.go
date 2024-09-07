@@ -9,9 +9,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TruncateBody struct {
-	Tables []string `json:"tables"`
-}
+// type TruncateBody []string
+
+// type TruncateBody struct {
+// 	Tables []string `json:"tables"`
+// }
 
 type SeqResetBody struct {
 	Sequences []string `json:"sequences"`
@@ -20,12 +22,12 @@ type SeqResetBody struct {
 // FUNCTION:
 func Truncate(c echo.Context) error {
 	schema := c.Param("schema")
-	body := TruncateBody{}
+	body := []string{}
 	if err := c.Bind(&body); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
 
-	for _, table := range body.Tables {
+	for _, table := range body {
 		execTruncate(schema, table)
 	}
 
@@ -35,12 +37,12 @@ func Truncate(c echo.Context) error {
 // FUNCTION:
 func SequenceReset(c echo.Context) error {
 	schema := c.Param("schema")
-	body := SeqResetBody{}
+	body := []string{}
 	if err := c.Bind(&body); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
 
-	for _, sequence := range body.Sequences {
+	for _, sequence := range body {
 		execSeqReset(schema, sequence)
 	}
 
